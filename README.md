@@ -1,10 +1,12 @@
 # PapoteCar-PoecProject
 
-Projet fil rouge de la POEC Web & Mobile, au sein de l'IMIE. Clone de BlaBlaCar en Symfony 4. Projet du groupe SwatAlpha.
+Projet fil rouge de la POEC Web & Mobile, au sein de du groupe Swat Alpha de l'IMIE. 
 
 ## Application de covoiturage
 
-### Développement avec Symfony4, Twig & Scss
+Clone de BlaBlaCar.
+
+### Développement avec Symfony 4, Twig et SCSS
 
 #### Pour avoir un rendu (débutant) :
 
@@ -18,7 +20,5 @@ Projet fil rouge de la POEC Web & Mobile, au sein de l'IMIE. Clone de BlaBlaCar 
 * rendez-vous dans le dossier, toujours avec le terminal "cd papotecar-poecproject"
 * faite un "composer install" (en ligne de commande)
 * enfin rendez-vous dans le champ url du navigateur de votre choix et taper http://localhost/papotecar-poecproject/public
-
-Maintenant le site internet est installé.
 
 Bonne navigation
