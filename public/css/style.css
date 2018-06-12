@@ -109,13 +109,14 @@ body {
   align-items: center; }
 
 .alert {
-  height: 80px; }
+  height: 80px;
+  width: 100%; }
 
 .alert-success {
   background-color: #d6efb4;
   color: #88DB15; }
 
-.alert-success {
+.alert-danger {
   background-color: #efb4b4;
   color: #c71b1b; }
 
@@ -628,7 +629,10 @@ footer {
     font-size: 2rem; }
   .map-form-run span {
     display: flex;
-    height: 30px; }
+    height: 30px;
+    align-items: center; }
+    .map-form-run span div {
+      margin-left: 20px; }
 
 /* END FORM PAGE */
 /* DASHBOARD PAGE */
@@ -783,75 +787,3 @@ footer {
 /* END DASHBOARD PAGE */
 
 /*# sourceMappingURL=style.css.map */
-
-.account-main{
-  color: #1b1b1b;
-  margin: 1px auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-#account-title{
-  margin-top: 30px;
-  margin-bottom: 30px;
-}
-
-.account-liens{
-  margin-bottom: 20px;
-}
-
-.account-detail{
-  font-family: "latoRegular", arial, sans-serif;
-  margin-top: 20px;
-  margin-bottom: 30px;
-  border: 1px solid palevioletred;
-  background-color: white;
-  border-radius: 6px;
-  height: 300px;
-  width: 700px;
-  display: flex;
-  flex-direction: row;
-}
-
-.account-detail span{
-  color: #E6146C;
-  margin-right: 10px;
-}
-
-.account-detail li{
- margin-bottom: 15px;
-}
-
-.account-img{
-  height: 300px;
-  width: 150px;
-  flex: auto;
-  /*background-color: snow;*/
-}
-
-.account-img-profil{
-  width: 317px;
-  height: 300px;
-  background-size: cover;
-  background-position: center;
-  overflow: hidden;
-  border-radius: 6px;
-}
-
-.account-list{
-  flex: auto;
-}
-
-.account-span{
-  color: #E6146C;
-}
-
-.account-runs{
-  margin-top: 40px;
-}
-
-#register_picture{ /* a ne pas garder */
-  color: red;
-}

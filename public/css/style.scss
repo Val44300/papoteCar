@@ -16,6 +16,7 @@
 
 	.alert {
 		height: 80px;
+		width: 100%;
 	}
 
 	.alert-success {
@@ -24,7 +25,7 @@
 	}
 
 	
-	.alert-success {
+	.alert-danger {
 		background-color: #efb4b4;
 		color: $red;
 	}
@@ -188,7 +189,6 @@
 	.firstname {
 		text-transform: uppercase;
 	}
-
 	.lastname {
 		text-transform: capitalize;
 	}
@@ -763,8 +763,9 @@
 		span {
 			display: flex;
 			height: 30px;
+			align-items: center;
 
-			div{
+			div {
 				margin-left: 20px;
 			}
 		}
@@ -985,4 +986,3 @@
 		}
 	}
 /* END DASHBOARD PAGE */
-
