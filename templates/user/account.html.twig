@@ -4,61 +4,38 @@
 
 {% block body %}
 
-    <main class="dashboard account-main">
+    Welcome {{ app.user.firstname }}
 
-        <h1 id="account-title">Bienvenue {{ app.user.lastname }} <span>{{ app.user.firstname }}</span></h1>
 
-        <div class="account-liens">
-            <a href="{{ path('home') }}">Home</a> |
-            <a href="{{ path('logout') }}">Deconnexion</a> |
-            <a href="{{ path('suppAccount') }}"><span style="color:#ff614a">Supprimer le compte</span></a> |
-            <a href="{{ path('editAccount') }}">Editer / Modifier</a>
-        </div>
+    <a href="{{ path('logout') }}">Logout</a>
+    <a href="{{ path('home') }}">Home</a>
 
-        <div class="account-detail">
-            <div class="account-img">
-                {% if app.user.picture != null %}
-                    <div class="account-img-profil" style="background-image:url( '{{ asset('img_upload/' ~ app.user.picture) }}' )"></div>
-                {% else %}
-                    <div class="account-img-profil" style="background-image:url('{{ asset('img/dog.jpg') }}'); -webkit-filter: saturate(40%);"></div>
-                {% endif %}
-            </div>
-            <div class="account-list">
-                <ul>
-                    <li><span class="account-span">Nom:</span> {{ app.user.firstname | upper }}</li>
-                    <li><span class="account-span">Prenom:</span> {{ app.user.lastname }}</li>
-                    <li><span class="account-span">Email:</span> {{ app.user.email }}</li>
-                    <li><span class="account-span">Tel:</span> {{ app.user.tel }}</li>
-                    <li><span class="account-span">Vehicule:</span> {{ app.user.vehicle }}</li>
-                </ul>
-            </div>
-        </div>
 
-        <form action="{{ path('editAccount') }}">
-            <button>Modifiez votre profil</button>
-        </form>
+    <ul>
+        <li>FIRSTNAME = {{ app.user.firstname }}</li>
+        <li>LASTNAME = {{ app.user.lastname }}</li>
+        <li>EMAIL = {{ app.user.email }}</li>
+    </ul>
 
-        <!--<h3><a href="{{ path('addRun') }}">Rechercher un trajet</a></h3>-->
+    <a href="{{ path('suppAccount') }}">Supp</a>
+    <a href="{{ path('editAccount') }}">Edit</a>
 
-        <div class="account-runs">
-            <h2> Runs where I drive</h2>
+    <h3><a href="{{ path('addRun') }}">Add Run</a></h3>
 
-            {% for run in runs %}
+    <h2> Runs where I drive</h2>
 
-                <h4>{{ run.departureSchedule |date("d-m-Y") }} - {{ run.departureSchedule |date("H:i") }}</h4>
+    {% for run in runs %}
 
-                <p>DEPART = {{ run.departure.cityName }}</p>
-                <p>ARRIVEE = {{ run.arrival.cityName }}</p>
+        <h4>{{ run.departureSchedule |date("d-m-Y") }} - {{ run.departureSchedule |date("H:i") }}</h4>
 
-                <button><a href="{{ path('deleteRun', {'id': run.id}) }}">SUPP</a></button>
-                <button><a href="{{ path('editRun', {'id': run.id}) }}">EDIT</a></button>
-                <hr>
-                {% else %}
+        <p>DEPART = {{ run.departure.cityName }}</p>
+        <p>ARRIVEE = {{ run.arrival.cityName }}</p>
 
-                <p> No runs where you drive !</p>
-            {% endfor %}
-        </div>
+        <button><a href="{{ path('deleteRun', {'id': run.id}) }}">SUPP</a></button>
+        <button><a href="{{ path('editRun', {'id': run.id}) }}">EDIT</a></button>
+        <hr>
+        {% else %}
 
-    </main>
-
+        <p> No runs where you drive !</p>
+    {% endfor %}
 {% endblock %}
