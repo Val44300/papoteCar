@@ -14,7 +14,7 @@ Clone de BlaBlaCar en Symfony 4. Projet du groupe Swat Alpha.
     façon simple : 
         <br>- lancer wamp<br>
         - en bas à droite (flêche vers le haut), clic gauche sur le W > clic PHP > Version > 7.2
-* cloner le fichier dans un dossier dans C:\wamp\www avec la command "git clone https://github.com/ValentinBretel/PapoteCar/papotecar-poecproject.git"
+* cloner le fichier dans un dossier dans C:\wamp\www avec la command "git clone https://github.com/ValentinBretel/papoteCar/tree/papotecar-poecproject"
 * rendez-vous dans le dossier, toujours avec le terminal "cd papotecar-poecproject"
 * faite un "composer install" (en ligne de commande)
 * enfin rendez-vous dans le champ url du navigateur de votre choix et taper http://localhost/papotecar-poecproject/public
