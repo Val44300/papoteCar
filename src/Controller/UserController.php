@@ -7,12 +7,14 @@ use App\Form\RegisterType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class UserController extends Controller
 {
@@ -26,7 +28,6 @@ class UserController extends Controller
         $registerForm = $this->createForm(RegisterType::class, $member);
         $registerForm->handleRequest($req);
 
-
         if($registerForm->isSubmitted() && $registerForm->isValid()){
 
             //encode le mdp si le formulaire a bien été traité et est validé
@@ -34,8 +35,20 @@ class UserController extends Controller
             $member->setPassword($encoded);
             $member->setRoles(["ROLE_USER"]);
 
-            //ajoute en bdd
+            //Upload d'images
+            /** @var UploadedFile $file */
+            $file = $registerForm->get('picture')->getData();
+            $fileName = md5(date('Y-m-d H:i:s:u')).'.'.$file->guessExtension();
+
+            $file->move(
+                $this->getParameter('img_upload'),
+                $fileName
+            );
+
+            $member->setPicture($fileName);
+
             $em->persist($member);
+            //ajoute en bdd
             $em->flush();
 
             //récupére les credentials apres le register, et se log automatiquement
@@ -44,7 +57,7 @@ class UserController extends Controller
             $this->container->get('session')->set('_security_main', serialize($token));
 
             //redirecte vers tableau de bord
-            return $this->redirectToRoute("ridecourt");
+            return $this->redirectToRoute("myRun");
         }
         return $this->render('user/register.html.twig', ["registerForm"=>$registerForm->createView()]);
     }
@@ -54,7 +67,7 @@ class UserController extends Controller
      */
     public function login(Request $request, AuthenticationUtils $auth){
         if($this->getUser()){
-            return $this->redirectToRoute('ridecourt');
+            return $this->redirectToRoute('myRun');
         }
         $error = $auth->getLastAuthenticationError();
         $lastUsername = $auth->getLastUsername();
@@ -82,8 +95,7 @@ class UserController extends Controller
         $runs = $em->getRepository(Run::class)->selectRunsByDriversWhereDepartureSupNow($this->getUser());
         return $this->render('user/account.html.twig',['runs'=> $runs]);
     }
-
-
+    
     /**
      * @Route("/account/delete", name="suppAccount")
      */
@@ -103,11 +115,14 @@ class UserController extends Controller
                     $session = new Session();
                     $session->invalidate();
 
+                    unlink($this->getParameter('img_upload').$this->getUser()->getPicture());
+
                     //supprime l'utilisateur
                     $em->remove($this->getUser());
                     $em->flush();
 
-                    $this->addFlash('success', 'Account successfully deleted');
+
+                    $this->addFlash('success', 'Votre compte à bien été supprimé');
                     return $this->redirectToRoute('home');
 
                 } catch (\PDOException $e) {
@@ -117,8 +132,6 @@ class UserController extends Controller
         }else{
             return $this->redirectToRoute('home');
         }
-
-
     }
 
     /**
@@ -133,17 +146,35 @@ class UserController extends Controller
 
             //donne au formulaire les infos de $member afin de préremplir les champs et traite le formulaire
             $registerForm = $this->createForm(RegisterType::class, $member);
+            $originalPicture = $member->getPicture();
             $registerForm->handleRequest($req);
 
-
                 if($registerForm->isSubmitted() && $registerForm->isValid()){
-
                     //si le user a rempli le champ "password", le change
                     //s'il n'a pas rempli le champs, le laisse comme à l'origine
                     if(!$registerForm->get('password')->getData() === null){
                         $encoded= $enc->encodePassword($member, $registerForm->get('password')->getData());
                         $member->setPassword($encoded);
+                    }
 
+                    if($registerForm->get('picture')->getData() == null){
+
+                            new File($this->getParameter('img_upload').'/'.$originalPicture);
+                            $member->setPicture($originalPicture);
+                    }else{
+                        $originalFileAddress = $this->getParameter('img_upload').'/'.$originalPicture;
+
+                        if (file_exists($originalFileAddress)){
+                            unlink($originalFileAddress);
+
+                        }
+                        /** @var UploadedFile $file */
+                        $file = $registerForm->get('picture')->getData();
+                        $fileName = md5(date('Y-m-d H:i:s:u')).'.'.$file->guessExtension();
+
+                        $file->move($this->getParameter('img_upload'), $fileName);
+
+                        $member->setPicture($fileName);
                     }
 
                     $em->flush();
@@ -153,8 +184,7 @@ class UserController extends Controller
                 return $this->render('user/register.html.twig', ["registerForm"=>$registerForm->createView()]);
             }else{
                 return $this->redirectToRoute('home');
-            }
-
+        }
     }
 
     /**
@@ -164,8 +194,6 @@ class UserController extends Controller
         $users = $em->getRepository(Member::class)->findAll();
 
         return $this->render('user/list.html.twig', ['users' => $users]);
-
-
     }
 
     /**
@@ -179,6 +207,5 @@ class UserController extends Controller
         }else{
             return $this->render('user/userProfile.html.twig', ['user'=>$user, 'runs'=> $runs]);
         }
-
     }
 }
