@@ -4,8 +4,11 @@ namespace App\Controller;
 
 use App\Entity\Run;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+
 
 class AppController extends Controller
 {
@@ -18,21 +21,25 @@ class AppController extends Controller
     }
 
     /**
-     * @Route("/tableau-de-bord/trajet-en-cours", name="ridecourt")
+     * @Route("/tableau-de-bord/trajet-en-cours", name="myRun")
      */
     public function rideToCourt(EntityManagerInterface $em)
     {
         $runs = $em->getRepository(Run::class)->selectRunsByDriversWhereDepartureSupNow($this->getUser());
-        return $this->render('tableau/ride_to_court.html.twig', ['runs'=>$runs]);
+        return $this->render('tableau/my_run.html.twig', ['runs'=>$runs]);
     }
 
-    
     /**
-     * @Route("/tableau-de-bord/rechercher-un-trajet", name="searchride")
+     * @Route("/tableau-de-bord/rechercher-un-trajet", name="searchRun")
+     *
      */
     public function searchRide(EntityManagerInterface $em)
     {
+        $departure = "";
+        $arrival = "";
+        $date = new \DateTime('now 00:00');
 
-        return $this->render('tableau/search_ride.html.twig');
+        $runs = $em->getRepository(Run::class)->searchRun($departure, $arrival, $date);
+            return $this->render('tableau/search_run.html.twig', ['runs' => $runs]);
     }
 }
